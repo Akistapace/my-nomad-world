@@ -48,16 +48,17 @@ const config: Config = {
         "pixel-green": "0 0 10px #39ff14, 0 0 30px #39ff1440",
         "pixel-magenta": "0 0 10px #ff00ff, 0 0 30px #ff00ff40",
         "pixel-inset": "inset 0 0 20px rgba(0,229,255,0.05)",
-        "pixel-card": "3px 3px 0 #01579b, inset 1px 1px 0 rgba(255,255,255,0.15), inset -1px -1px 0 rgba(0,0,0,0.25)",
+        "pixel-card":
+          "3px 3px 0 #01579b, inset 1px 1px 0 rgba(255,255,255,0.15), inset -1px -1px 0 rgba(0,0,0,0.25)",
         "pixel-sm": "2px 2px 0 #014080",
         "pixel-md": "3px 3px 0 #014080",
         "pixel-nav": "0 -3px 0 #01579b, inset 0 1px 0 rgba(255,255,255,0.15)",
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 3s ease-in-out infinite",
+        float: "float 3s ease-in-out infinite",
         "spin-slow": "spin 20s linear infinite",
-        "glow": "glow 2s ease-in-out infinite alternate",
+        glow: "glow 2s ease-in-out infinite alternate",
       },
       keyframes: {
         float: {

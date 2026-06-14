@@ -1,17 +1,10 @@
 ﻿"use client";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-  ZoomableGroup,
-} from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import { COUNTRY_CENTER, ISO_NUMERIC_TO_ALPHA3 } from "@/lib/countries-catalog";
 import type { Country } from "@/lib/types";
 import { PIN_COLORS } from "@/lib/types";
 
-const GEO_URL =
-  "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface Props {
   country: Country;
@@ -42,11 +35,7 @@ export default function CountryMap({ country }: Props) {
                     geography={geo}
                     style={{
                       default: {
-                        fill: isFocus
-                          ? code === "BRA"
-                            ? "#39ff1466"
-                            : "#00b4d866"
-                          : "#0d2f52",
+                        fill: isFocus ? (code === "BRA" ? "#39ff1466" : "#00b4d866") : "#0d2f52",
                         stroke: isFocus ? (code === "BRA" ? "#39ff14" : "#00e5ff") : "#ffffff",
                         strokeWidth: isFocus ? 1 : 0.3,
                         outline: "none",

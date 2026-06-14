@@ -1,4 +1,4 @@
-﻿import type { ReactNode, CSSProperties } from "react";
+﻿import type { CSSProperties, ReactNode } from "react";
 
 interface Props {
   title?: string;
@@ -21,13 +21,8 @@ export default function PixelPanel({
       style={{ border: `2px solid ${accentColor}`, ...style }}
     >
       {title && (
-        <div
-          className="px-3 py-[5px] flex items-center gap-2"
-          style={{ background: accentColor }}
-        >
-          <span className="text-[8px] text-[#0a3060] font-pixel">
-            ► {title}
-          </span>
+        <div className="px-3 py-[5px] flex items-center gap-2" style={{ background: accentColor }}>
+          <span className="text-[8px] text-[#0a3060] font-pixel">► {title}</span>
         </div>
       )}
       <div className={noPadding ? undefined : "p-[14px]"}>{children}</div>

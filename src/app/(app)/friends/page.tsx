@@ -1,20 +1,37 @@
 ﻿"use client";
+import { useEffect, useState } from "react";
 import PixelCharacter from "@/components/PixelCharacter";
 import XPToast from "@/components/XPToast";
 import { useUser } from "@/lib/context/user-context";
 import { createClient } from "@/lib/supabase/client";
 import type { Character, Friend } from "@/lib/types";
 import { grantXP, type XPResult } from "@/lib/xp";
-import { useEffect, useState } from "react";
 
-const DEFAULT_CHARACTER: Character = { skin: "adventurer", color: "blue", hat: false, backpack: false };
+const DEFAULT_CHARACTER: Character = {
+  skin: "adventurer",
+  color: "blue",
+  hat: false,
+  backpack: false,
+};
 
-function Panel({ title, accent = "#00e5ff", children, noPad }: {
-  title?: string; accent?: string; children: React.ReactNode; noPad?: boolean;
+function Panel({
+  title,
+  accent = "#00e5ff",
+  children,
+  noPad,
+}: {
+  title?: string;
+  accent?: string;
+  children: React.ReactNode;
+  noPad?: boolean;
 }) {
   return (
     <div className="pixel-panel overflow-hidden">
-      {title && <div className="pixel-panel-header" style={{ borderBottomColor: accent, color: accent }}>{title}</div>}
+      {title && (
+        <div className="pixel-panel-header" style={{ borderBottomColor: accent, color: accent }}>
+          {title}
+        </div>
+      )}
       <div className={noPad ? undefined : "p-5"}>{children}</div>
     </div>
   );
@@ -41,7 +58,10 @@ export default function FriendsPage() {
 
       const friendIds = (friendRows ?? []).map((r) => r.friend_id);
       setFriendIds(new Set(friendIds));
-      if (friendIds.length === 0) { setLoading(false); return; }
+      if (friendIds.length === 0) {
+        setLoading(false);
+        return;
+      }
 
       const { data: profiles } = await supabase
         .from("users")
@@ -66,8 +86,12 @@ export default function FriendsPage() {
         .eq("visited", true);
 
       const countByUser: Record<string, number> = {};
-      (visitedRows ?? []).forEach((r) => { countByUser[r.user_id] = (countByUser[r.user_id] ?? 0) + 1; });
-      friendProfiles.forEach((f) => { f.countriesCount = countByUser[f.id] ?? 0; });
+      (visitedRows ?? []).forEach((r) => {
+        countByUser[r.user_id] = (countByUser[r.user_id] ?? 0) + 1;
+      });
+      friendProfiles.forEach((f) => {
+        f.countriesCount = countByUser[f.id] ?? 0;
+      });
 
       setFriends(friendProfiles);
       setLoading(false);
@@ -94,11 +118,11 @@ export default function FriendsPage() {
           username: u.username,
           character: (u.character as unknown as Character) ?? DEFAULT_CHARACTER,
           level: u.level,
-          xp: (u as Record<string, unknown>).xp as number ?? 0,
+          xp: ((u as Record<string, unknown>).xp as number) ?? 0,
           countriesCount: 0,
           rank: u.rank,
           isOnline: false,
-        }))
+        })),
     );
   }
 
@@ -111,7 +135,7 @@ export default function FriendsPage() {
         { user_id: user.id, friend_id: friendId },
         { user_id: friendId, friend_id: user.id },
       ],
-      { ignoreDuplicates: true }
+      { ignoreDuplicates: true },
     );
     const added = searchResults.find((u) => u.id === friendId);
     if (added) {
@@ -126,11 +150,12 @@ export default function FriendsPage() {
 
   const onlineCount = 0;
 
-  if (loading) return (
-    <div className="page-content flex items-center justify-center min-h-[400px]">
-      <div className="text-[10px] text-white blink">CARREGANDO...</div>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="page-content flex items-center justify-center min-h-[400px]">
+        <div className="text-[10px] text-white blink">CARREGANDO...</div>
+      </div>
+    );
 
   return (
     <div className="page-content flex flex-col gap-5">
@@ -138,7 +163,7 @@ export default function FriendsPage() {
       <div className="page-header">
         <div className="page-title">👥 AMIGOS</div>
         <div className="ml-auto text-[8px] text-white">
-          <span className="text-[#39ff14]">●</span>{" "}{onlineCount} ONLINE
+          <span className="text-[#39ff14]">●</span> {onlineCount} ONLINE
         </div>
       </div>
 
@@ -178,7 +203,9 @@ export default function FriendsPage() {
                     background: i % 2 === 0 ? "#0277bd44" : "transparent",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#01579b")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = i % 2 === 0 ? "#0277bd44" : "transparent")}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = i % 2 === 0 ? "#0277bd44" : "transparent")
+                  }
                 >
                   <div className="relative shrink-0">
                     <div className="bg-[#01579b] border-2 border-[#29b6f6] p-2">
@@ -198,13 +225,21 @@ export default function FriendsPage() {
               ))}
             </Panel>
           ) : (
-            <div className="text-[8px] text-white text-center py-10">Nenhum amigo ainda. Busque jogadores!</div>
+            <div className="text-[8px] text-white text-center py-10">
+              Nenhum amigo ainda. Busque jogadores!
+            </div>
           )}
           <button
             onClick={() => setTab("search")}
             className="w-full bg-transparent border-2 border-dashed border-[#29b6f6] p-4 text-white font-pixel text-[8px] cursor-pointer mt-3"
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#00e5ff"; e.currentTarget.style.color = "#00e5ff"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#29b6f6"; e.currentTarget.style.color = "#fff"; }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#00e5ff";
+              e.currentTarget.style.color = "#00e5ff";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "#29b6f6";
+              e.currentTarget.style.color = "#fff";
+            }}
           >
             + ADICIONAR AMIGO
           </button>
@@ -222,10 +257,15 @@ export default function FriendsPage() {
                 placeholder=""
                 className="px-4 py-3"
               />
-              <button onClick={handleSearch}
+              <button
+                onClick={handleSearch}
                 className="shrink-0 bg-[#00e5ff22] border-l-2 border-l-[#29b6f6] px-5 text-[#00e5ff] cursor-pointer text-lg font-pixel self-stretch flex items-center"
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#00e5ff33"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "#00e5ff22"; }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#00e5ff33";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "#00e5ff22";
+                }}
               >
                 🔍
               </button>
@@ -238,14 +278,19 @@ export default function FriendsPage() {
                 <div
                   key={u.id}
                   className="flex items-center gap-4 px-5 py-4"
-                  style={{ borderBottom: i < searchResults.length - 1 ? "1px solid #29b6f620" : "none", background: i % 2 === 0 ? "#0277bd44" : "transparent" }}
+                  style={{
+                    borderBottom: i < searchResults.length - 1 ? "1px solid #29b6f620" : "none",
+                    background: i % 2 === 0 ? "#0277bd44" : "transparent",
+                  }}
                 >
                   <div className="bg-[#01579b] border-2 border-[#29b6f6] p-2 shrink-0">
                     <PixelCharacter character={u.character} size={40} />
                   </div>
                   <div className="flex-1">
                     <div className="text-[10px] text-[#ffffff] mb-1">@{u.username}</div>
-                    <div className="text-[7px] text-white">LVL {u.level} · RANK #{u.rank}</div>
+                    <div className="text-[7px] text-white">
+                      LVL {u.level} · RANK #{u.rank}
+                    </div>
                   </div>
                   <button
                     onClick={() => handleAdd(u.id)}

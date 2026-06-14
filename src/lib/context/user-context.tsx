@@ -18,13 +18,7 @@ export interface UserProfile {
 
 const UserContext = createContext<UserProfile | null>(null);
 
-export function UserProvider({
-  user,
-  children,
-}: {
-  user: UserProfile;
-  children: React.ReactNode;
-}) {
+export function UserProvider({ user, children }: { user: UserProfile; children: React.ReactNode }) {
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
 

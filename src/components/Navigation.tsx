@@ -1,14 +1,17 @@
 ﻿"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaCamera, FaTrophy, FaUser, FaUsers } from "react-icons/fa";
+import { GiWorld } from "react-icons/gi";
+import { TbTargetArrow } from "react-icons/tb";
 
 const NAV_ITEMS = [
-  { href: "/", label: "MAPA", icon: "🌍" },
-  { href: "/ranking", label: "RANK", icon: "🏆" },
-  { href: "/challenges", label: "MISSÃO", icon: "⚡" },
-  { href: "/stories", label: "STORY", icon: "📸" },
-  { href: "/friends", label: "AMIGOS", icon: "👥" },
-  { href: "/profile", label: "PERFIL", icon: "👤" },
+  { href: "/", label: "MAPA", icon: <GiWorld  className="h-5 w-5 text-white" />},
+  { href: "/ranking", label: "RANK", icon: <FaTrophy  className="h-3 w-3 text-white" /> },
+  { href: "/challenges", label: "MISSÃO", icon: <TbTargetArrow  className="h-3 w-3 text-white" /> },
+  { href: "/stories", label: "STORY", icon: <FaCamera className="h-3 w-3 text-white" />  },
+  { href: "/friends", label: "AMIGOS", icon: <FaUsers  className="h-3 w-3 text-white" /> },
+  { href: "/profile", label: "PERFIL", icon: <FaUser  className="h-3 w-3 text-white" /> },
 ];
 
 export default function Navigation() {
@@ -33,7 +36,9 @@ export default function Navigation() {
                 <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#00e5ff] shadow-[0_0_6px_#00e5ff]" />
               )}
               <span className="text-base">{item.icon}</span>
-              <span className={`font-pixel text-[5px] tracking-[0.5px] ${active ? "text-[#00e5ff]" : "text-white/50"}`}>
+              <span
+                className={`font-pixel text-[5px] tracking-[0.5px] ${active ? "text-[#00e5ff]" : "text-white/50"}`}
+              >
                 {active ? `►${item.label}` : item.label}
               </span>
             </Link>

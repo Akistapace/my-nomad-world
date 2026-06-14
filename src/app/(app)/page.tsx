@@ -21,9 +21,9 @@ export default function HomePage() {
   // homeCode and initial globe rotation come from server-side context — no async race
   const homeCode = user.homeCode;
   const initialRotation = useMemo<[number, number, number]>(
-    () => homeCode ? rotationForCountry(homeCode) : [-45, -10, 0],
+    () => (homeCode ? rotationForCountry(homeCode) : [-45, -10, 0]),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [] // compute once at mount — homeCode is stable server value
+    [], // compute once at mount — homeCode is stable server value
   );
 
   const fetchMap = useCallback(async () => {
@@ -58,7 +58,7 @@ export default function HomePage() {
         flagEmoji: c.flag_emoji,
         continent: c.continent,
         pins: pinsByCountry[c.code] ?? [],
-      }))
+      })),
     );
   }, [user.id]);
 
@@ -81,10 +81,16 @@ export default function HomePage() {
         </div>
         <div className="[flex:2] py-[10px] px-2 flex flex-col gap-[3px]">
           <div className="flex justify-between text-[5px] text-white">
-            <span>XP</span><span>{user.xp}/{user.xpToNext}</span>
+            <span>XP</span>
+            <span>
+              {user.xp}/{user.xpToNext}
+            </span>
           </div>
           <div className="h-[5px] bg-[#01579b] overflow-hidden">
-            <div className="xp-bar-fill h-full bg-[linear-gradient(90deg,#00e5ff,#bf5af2)]" style={{ width: `${xpPct}%` }} />
+            <div
+              className="xp-bar-fill h-full bg-[linear-gradient(90deg,#00e5ff,#bf5af2)]"
+              style={{ width: `${xpPct}%` }}
+            />
           </div>
         </div>
         <div className="flex flex-col items-center justify-center py-[10px] px-2 gap-1">
@@ -127,10 +133,9 @@ export default function HomePage() {
       />
       {xpResult && <XPToast result={xpResult} onDone={() => setXpResult(null)} />}
 
-      <div className="shrink-0 flex justify-center gap-6 py-[10px] text-[7px] text-white border-t-2 border-t-[#29b6f644] bg-[#0277bd88]">
+      <div className="shrink-0 flex justify-center gap-6 py-[10px] text-lg text-white border-t-2 border-t-[#29b6f644] bg-[#0277bd88]">
         <span>🌍 {user.countriesCount} países</span>
         <span>📍 {user.totalPins} pins</span>
-        <span>↔ arraste para girar</span>
       </div>
     </div>
   );

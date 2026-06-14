@@ -62,9 +62,9 @@ Branch: `main` | Stack: Next.js 16 + Supabase + Vercel | Design: Pixel Art 64-bi
 - [ ] Histórico de países visitados
 
 ### Etapa 9 — Deploy Vercel
-- [ ] Configurar variáveis de ambiente no Vercel
-- [ ] Push para produção
-- [ ] Testar autenticação em produção
+- [x] Configurar variáveis de ambiente no Vercel
+- [x] Push para produção
+- [x] Testar autenticação em produção
 
 ---
 
@@ -81,3 +81,8 @@ Branch: `main` | Stack: Next.js 16 + Supabase + Vercel | Design: Pixel Art 64-bi
 - Amizade: `upsert ignoreDuplicates: true` evita duplicatas bidirecionais
 - Busca: `ilike(username, raw%)` — prefix only, não contains
 - Globe rotation: `[-lng, -lat, 0]` para centralizar em país
+
+
+## Próximas etapas
+### Item 1, inserir um painel admin, para que eu possa criar novas missões
+- [] forneça as 100 primeiras missões

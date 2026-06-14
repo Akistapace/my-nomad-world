@@ -16,7 +16,7 @@ export async function grantXP(
   userId: string,
   amount: number,
   currentXp: number,
-  currentLevel: number
+  currentLevel: number,
 ): Promise<XPResult> {
   const supabase = createClient();
 
@@ -32,10 +32,7 @@ export async function grantXP(
     xpToNext = xpToNextLevel(level);
   }
 
-  await supabase
-    .from("users")
-    .update({ xp, level, xp_to_next: xpToNext })
-    .eq("id", userId);
+  await supabase.from("users").update({ xp, level, xp_to_next: xpToNext }).eq("id", userId);
 
   await supabase.rpc("recalculate_ranks");
 

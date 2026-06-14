@@ -1,5 +1,5 @@
 declare module "react-simple-maps" {
-  import { ComponentType, SVGProps, ReactNode, CSSProperties } from "react";
+  import { ComponentType, CSSProperties, ReactNode, SVGProps } from "react";
 
   export interface GeographyStyle {
     fill?: string;

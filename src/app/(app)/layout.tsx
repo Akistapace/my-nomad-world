@@ -1,20 +1,26 @@
+import { redirect } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import Sidebar from "@/components/Sidebar";
 import type { UserProfile } from "@/lib/context/user-context";
 import { UserProvider } from "@/lib/context/user-context";
 import { createClient } from "@/lib/supabase/server";
 import type { Character } from "@/lib/types";
-import { redirect } from "next/navigation";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
   const [{ data: profile }, { count: countriesCount }] = await Promise.all([
     supabase.from("users").select("*").eq("id", user.id).single(),
-    supabase.from("countries").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("visited", true),
+    supabase
+      .from("countries")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("visited", true),
   ]);
 
   // Trigger may have failed at signup — ensure row exists
@@ -22,9 +28,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     await supabase.from("users").upsert(
       {
         id: user.id,
-        username: (user.user_metadata?.username as string | undefined) ?? user.email?.split("@")[0] ?? "Nomade",
+        username:
+          (user.user_metadata?.username as string | undefined) ??
+          user.email?.split("@")[0] ??
+          "Nomade",
       },
-      { ignoreDuplicates: true }
+      { ignoreDuplicates: true },
     );
   }
 

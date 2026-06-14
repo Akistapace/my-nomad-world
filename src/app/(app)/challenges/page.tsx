@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
+import { useEffect, useMemo, useState } from "react";
 import XPToast from "@/components/XPToast";
 import { useUser } from "@/lib/context/user-context";
 import { createClient } from "@/lib/supabase/client";
 import type { Challenge } from "@/lib/types";
 import { grantXP, type XPResult } from "@/lib/xp";
-import { useEffect, useMemo, useState } from "react";
 
 type Filter = "all" | "pending" | "completed";
 
@@ -52,7 +52,7 @@ export default function ChallengesPage() {
           xpReward: c.xp_reward,
           coinReward: c.coin_reward,
           completed: c.completed,
-        }))
+        })),
       );
       setLoading(false);
     }
@@ -68,9 +68,7 @@ export default function ChallengesPage() {
       .update({ completed: true, progress: challenge.total })
       .eq("id", challenge.id);
     setChallenges((prev) =>
-      prev.map((c) =>
-        c.id === challenge.id ? { ...c, completed: true, progress: c.total } : c
-      )
+      prev.map((c) => (c.id === challenge.id ? { ...c, completed: true, progress: c.total } : c)),
     );
     const result = await grantXP(user.id, challenge.xpReward, user.xp, user.level);
     setXpResult(result);
@@ -85,11 +83,12 @@ export default function ChallengesPage() {
 
   const totalCompleted = challenges.filter((c) => c.completed).length;
 
-  if (loading) return (
-    <div className="page-content flex items-center justify-center min-h-[400px]">
-      <div className="text-[10px] text-white blink">CARREGANDO...</div>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="page-content flex items-center justify-center min-h-[400px]">
+        <div className="text-[10px] text-white blink">CARREGANDO...</div>
+      </div>
+    );
 
   return (
     <div className="page-content flex flex-col gap-5">
@@ -108,12 +107,18 @@ export default function ChallengesPage() {
           <div className="flex-1">
             <div className="flex justify-between text-[8px] text-white/50 mb-2">
               <span>PROGRESSO GERAL</span>
-              <span className="text-[#ffd60a]">{totalCompleted}/{challenges.length}</span>
+              <span className="text-[#ffd60a]">
+                {totalCompleted}/{challenges.length}
+              </span>
             </div>
             <div className="pixel-progress-track">
               <div
                 className="pixel-progress-fill xp-bar-fill bg-[linear-gradient(90deg,#ffd60a,#ff8c00)]"
-                style={{ width: challenges.length ? `${(totalCompleted / challenges.length) * 100}%` : "0%" }}
+                style={{
+                  width: challenges.length
+                    ? `${(totalCompleted / challenges.length) * 100}%`
+                    : "0%",
+                }}
               />
             </div>
           </div>
@@ -128,11 +133,13 @@ export default function ChallengesPage() {
 
       {/* Filters */}
       <div className="flex gap-2">
-        {([
-          { key: "all", label: `TODOS (${challenges.length})` },
-          { key: "pending", label: `PENDENTES (${challenges.length - totalCompleted})` },
-          { key: "completed", label: `CONCLUÍDAS (${totalCompleted})` },
-        ] as { key: Filter; label: string }[]).map((f) => (
+        {(
+          [
+            { key: "all", label: `TODOS (${challenges.length})` },
+            { key: "pending", label: `PENDENTES (${challenges.length - totalCompleted})` },
+            { key: "completed", label: `CONCLUÍDAS (${totalCompleted})` },
+          ] as { key: Filter; label: string }[]
+        ).map((f) => (
           <button
             key={f.key}
             onClick={() => setFilter(f.key)}
@@ -154,7 +161,9 @@ export default function ChallengesPage() {
         style={{ maxHeight: "calc(100dvh - 320px)", minHeight: 200 }}
       >
         {filtered.length === 0 && (
-          <div className="text-[8px] text-white/40 text-center py-10">Nenhum desafio nesta categoria.</div>
+          <div className="text-[8px] text-white/40 text-center py-10">
+            Nenhum desafio nesta categoria.
+          </div>
         )}
 
         {filtered.map((challenge) => {
@@ -177,14 +186,21 @@ export default function ChallengesPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className="text-[10px] text-white">{challenge.title}</span>
-                      <span className="pixel-badge shrink-0" style={{ color: dColor, borderColor: dColor }}>
+                      <span
+                        className="pixel-badge shrink-0"
+                        style={{ color: dColor, borderColor: dColor }}
+                      >
                         {DIFF_LABEL[challenge.difficulty]}
                       </span>
                       {challenge.completed && (
-                        <span className="pixel-badge text-[#39ff14] border-[#39ff14]">✓ COMPLETO</span>
+                        <span className="pixel-badge text-[#39ff14] border-[#39ff14]">
+                          COMPLETO
+                        </span>
                       )}
                     </div>
-                    <div className="text-[8px] text-white/50 leading-[1.8]">{challenge.description}</div>
+                    <div className="text-[8px] text-white/50 leading-[1.8]">
+                      {challenge.description}
+                    </div>
                   </div>
                 </div>
 
@@ -218,7 +234,7 @@ export default function ChallengesPage() {
                       disabled={!!completing}
                       className="ml-auto font-pixel text-[7px] px-3 py-2 border-2 border-[#39ff14] bg-[#39ff1411] text-[#39ff14] cursor-pointer disabled:opacity-40"
                     >
-                      {isCompleting ? "..." : "✓ COMPLETAR"}
+                      {isCompleting ? "..." : "COMPLETAR"}
                     </button>
                   )}
                 </div>

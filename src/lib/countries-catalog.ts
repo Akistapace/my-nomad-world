@@ -37,7 +37,13 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
   { code: "BEN", alpha2: "BJ", name: "Benin", continent: "África", isoNumeric: "204" },
   { code: "BLR", alpha2: "BY", name: "Bielorrússia", continent: "Europa", isoNumeric: "112" },
   { code: "BOL", alpha2: "BO", name: "Bolívia", continent: "América do Sul", isoNumeric: "068" },
-  { code: "BIH", alpha2: "BA", name: "Bósnia e Herzegovina", continent: "Europa", isoNumeric: "070" },
+  {
+    code: "BIH",
+    alpha2: "BA",
+    name: "Bósnia e Herzegovina",
+    continent: "Europa",
+    isoNumeric: "070",
+  },
   { code: "BWA", alpha2: "BW", name: "Botsuana", continent: "África", isoNumeric: "072" },
   { code: "BRA", alpha2: "BR", name: "Brasil", continent: "América do Sul", isoNumeric: "076" },
   { code: "BRN", alpha2: "BN", name: "Brunei", continent: "Ásia", isoNumeric: "096" },
@@ -53,18 +59,36 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
   { code: "CYP", alpha2: "CY", name: "Chipre", continent: "Europa", isoNumeric: "196" },
   { code: "COL", alpha2: "CO", name: "Colômbia", continent: "América do Sul", isoNumeric: "170" },
   { code: "KOR", alpha2: "KR", name: "Coreia do Sul", continent: "Ásia", isoNumeric: "410" },
-  { code: "CRI", alpha2: "CR", name: "Costa Rica", continent: "América do Norte", isoNumeric: "188" },
+  {
+    code: "CRI",
+    alpha2: "CR",
+    name: "Costa Rica",
+    continent: "América do Norte",
+    isoNumeric: "188",
+  },
   { code: "HRV", alpha2: "HR", name: "Croácia", continent: "Europa", isoNumeric: "191" },
   { code: "CUB", alpha2: "CU", name: "Cuba", continent: "América do Norte", isoNumeric: "192" },
   { code: "DNK", alpha2: "DK", name: "Dinamarca", continent: "Europa", isoNumeric: "208" },
   { code: "EGY", alpha2: "EG", name: "Egito", continent: "África", isoNumeric: "818" },
-  { code: "SLV", alpha2: "SV", name: "El Salvador", continent: "América do Norte", isoNumeric: "222" },
+  {
+    code: "SLV",
+    alpha2: "SV",
+    name: "El Salvador",
+    continent: "América do Norte",
+    isoNumeric: "222",
+  },
   { code: "ARE", alpha2: "AE", name: "Emirados Árabes", continent: "Ásia", isoNumeric: "784" },
   { code: "ECU", alpha2: "EC", name: "Equador", continent: "América do Sul", isoNumeric: "218" },
   { code: "SVK", alpha2: "SK", name: "Eslováquia", continent: "Europa", isoNumeric: "703" },
   { code: "SVN", alpha2: "SI", name: "Eslovênia", continent: "Europa", isoNumeric: "705" },
   { code: "ESP", alpha2: "ES", name: "Espanha", continent: "Europa", isoNumeric: "724" },
-  { code: "USA", alpha2: "US", name: "Estados Unidos", continent: "América do Norte", isoNumeric: "840" },
+  {
+    code: "USA",
+    alpha2: "US",
+    name: "Estados Unidos",
+    continent: "América do Norte",
+    isoNumeric: "840",
+  },
   { code: "EST", alpha2: "EE", name: "Estônia", continent: "Europa", isoNumeric: "233" },
   { code: "ETH", alpha2: "ET", name: "Etiópia", continent: "África", isoNumeric: "231" },
   { code: "PHL", alpha2: "PH", name: "Filipinas", continent: "Ásia", isoNumeric: "608" },
@@ -74,7 +98,13 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
   { code: "GHA", alpha2: "GH", name: "Gana", continent: "África", isoNumeric: "288" },
   { code: "GEO", alpha2: "GE", name: "Geórgia", continent: "Ásia", isoNumeric: "268" },
   { code: "GRC", alpha2: "GR", name: "Grécia", continent: "Europa", isoNumeric: "300" },
-  { code: "GTM", alpha2: "GT", name: "Guatemala", continent: "América do Norte", isoNumeric: "320" },
+  {
+    code: "GTM",
+    alpha2: "GT",
+    name: "Guatemala",
+    continent: "América do Norte",
+    isoNumeric: "320",
+  },
   { code: "GUY", alpha2: "GY", name: "Guiana", continent: "América do Sul", isoNumeric: "328" },
   { code: "HTI", alpha2: "HT", name: "Haiti", continent: "América do Norte", isoNumeric: "332" },
   { code: "NLD", alpha2: "NL", name: "Holanda", continent: "Europa", isoNumeric: "528" },
@@ -114,7 +144,13 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
   { code: "MMR", alpha2: "MM", name: "Myanmar", continent: "Ásia", isoNumeric: "104" },
   { code: "NAM", alpha2: "NA", name: "Namíbia", continent: "África", isoNumeric: "516" },
   { code: "NPL", alpha2: "NP", name: "Nepal", continent: "Ásia", isoNumeric: "524" },
-  { code: "NIC", alpha2: "NI", name: "Nicarágua", continent: "América do Norte", isoNumeric: "558" },
+  {
+    code: "NIC",
+    alpha2: "NI",
+    name: "Nicarágua",
+    continent: "América do Norte",
+    isoNumeric: "558",
+  },
   { code: "NGA", alpha2: "NG", name: "Nigéria", continent: "África", isoNumeric: "566" },
   { code: "NOR", alpha2: "NO", name: "Noruega", continent: "Europa", isoNumeric: "578" },
   { code: "NZL", alpha2: "NZ", name: "Nova Zelândia", continent: "Oceania", isoNumeric: "554" },
@@ -128,7 +164,13 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
   { code: "PRT", alpha2: "PT", name: "Portugal", continent: "Europa", isoNumeric: "620" },
   { code: "GBR", alpha2: "GB", name: "Reino Unido", continent: "Europa", isoNumeric: "826" },
   { code: "CZE", alpha2: "CZ", name: "República Tcheca", continent: "Europa", isoNumeric: "203" },
-  { code: "DOM", alpha2: "DO", name: "República Dominicana", continent: "América do Norte", isoNumeric: "214" },
+  {
+    code: "DOM",
+    alpha2: "DO",
+    name: "República Dominicana",
+    continent: "América do Norte",
+    isoNumeric: "214",
+  },
   { code: "ROU", alpha2: "RO", name: "Romênia", continent: "Europa", isoNumeric: "642" },
   { code: "RWA", alpha2: "RW", name: "Ruanda", continent: "África", isoNumeric: "646" },
   { code: "RUS", alpha2: "RU", name: "Rússia", continent: "Europa", isoNumeric: "643" },
@@ -155,11 +197,11 @@ export const COUNTRIES_CATALOG: CountryOption[] = [
 ];
 
 export const ISO_NUMERIC_TO_ALPHA3: Record<string, string> = Object.fromEntries(
-  COUNTRIES_CATALOG.map((c) => [c.isoNumeric, c.code])
+  COUNTRIES_CATALOG.map((c) => [c.isoNumeric, c.code]),
 );
 
 export const COUNTRY_BY_CODE: Record<string, CountryOption> = Object.fromEntries(
-  COUNTRIES_CATALOG.map((c) => [c.code, c])
+  COUNTRIES_CATALOG.map((c) => [c.code, c]),
 );
 
 export const COUNTRY_CENTER: Record<string, { center: [number, number]; zoom: number }> = {

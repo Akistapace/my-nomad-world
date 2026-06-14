@@ -1,17 +1,16 @@
 ﻿"use client";
 
-import CountryFlag from "@/components/CountryFlag";
-import {
-  COUNTRIES_CATALOG,
-  countryFlagEmoji,
-  type CountryOption,
-} from "@/lib/countries-catalog";
 import { useUser } from "@/lib/context/user-context";
+import {
+  countryFlagEmoji,
+  type CountryOption
+} from "@/lib/countries-catalog";
 import { COUNTRY_CENTERS } from "@/lib/country-centers";
 import { createClient } from "@/lib/supabase/client";
 import type { Country, PinType } from "@/lib/types";
 import { grantXP, type XPResult } from "@/lib/xp";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { SearchCountry } from "./SearchCountry";
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -50,22 +49,6 @@ export default function AddCountryModal({
   const [saving, setSaving] = useState(false);
 
   const [day, month, year] = visitedAt.split("/");
-
-  const available = useMemo(() => {
-    const visited = new Set(visitedCodes);
-    const q = search.trim().toLowerCase();
-
-    return COUNTRIES_CATALOG.filter((c) => {
-      if (visited.has(c.code)) return false;
-      if (!q) return true;
-
-      return (
-        c.name.toLowerCase().includes(q) ||
-        c.code.toLowerCase().includes(q) ||
-        c.continent.toLowerCase().includes(q)
-      );
-    });
-  }, [search, visitedCodes]);
 
   function handleDateChange(value: string) {
     const digits = value.replace(/\D/g, "").slice(0, 8);
@@ -243,66 +226,28 @@ export default function AddCountryModal({
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-md max-h-[90dvh] overflow-y-auto border-2 border-[#00e5ff] bg-[#01579b]"
+        className="w-full max-w-md max-h-[90dvh] overflow-y-auto border-2 border-[#00e5ff] bg-[#01579b] rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="border-b-2 border-[#00e5ff] text-[#00e5ff] px-4 py-3 text-[10px]">
-          ◆ ADICIONAR PAÍS
+        <div className="text-[#00e5ff] px-4 py-2 text-[10px] flex items-center justify-between leading-1">
+          <span className="text-white">ADICIONAR PAÍS</span> 
+           <button
+              type="button"
+              onClick={handleClose}
+              disabled={saving}
+              className="px-4 py-4 text-white text-xl font-['Press_Start_2P'] text-[8px] leading-0 hover:opacity-75 cursor-pointer"
+            >
+              ✕
+          </button>
         </div>
 
         <div className="p-5 flex flex-col gap-4">
           {/* PAÍS */}
-          <div>
-            <div className="text-[7px] text-white/60 mb-2">PAÍS</div>
-
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder=""
-              className="w-full pixel-input"
-              style={{ fontSize: 8 }}
-            />
-
-            <div className="mt-2 max-h-36 overflow-y-auto border-2 border-white/25">
-              {available.length === 0 ? (
-                <div className="p-3 text-[7px] text-white">
-                  Nenhum país encontrado.
-                </div>
-              ) : (
-                available.map((c) => {
-                  const isActive = selected?.code === c.code;
-
-                  return (
-                    <button
-                      key={c.code}
-                      type="button"
-                      onClick={() => setSelected(c)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 border-b border-white/20 text-left font-['Press_Start_2P'] text-[7px] ${
-                        isActive
-                          ? "bg-[#00e5ff22] text-[#00e5ff]"
-                          : "text-white"
-                      }`}
-                    >
-                      <CountryFlag code={c.alpha2} size={28} />
-                      <span className="flex-1">{c.name}</span>
-                      <span className="text-[6px] text-white/60">
-                        {c.continent}
-                      </span>
-                      {isActive && (
-                        <span className="ml-2 text-[#39ff14] text-[10px] font-bold">
-                          ✓
-                        </span>
-                      )}
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </div>
+          <SearchCountry search={search} selected={selected} visitedCodes={visitedCodes} setSearch={setSearch} setSelected={setSelected} />
 
           {/* DATA */}
           <div>
-            <div className="text-[7px] text-white/60 mb-2">
+            <div className="text-[7px] text-white mb-2">
               DATA DA VISITA
             </div>
 
@@ -318,8 +263,8 @@ export default function AddCountryModal({
 
           {/* FOTO */}
           <div>
-            <div className="text-[7px] text-white/60 mb-2">
-              FOTO * <span className="text-[#ffd60a]">(obrigatória)</span>
+            <div className="text-[7px] text-white mb-2">
+              FOTO <span className="text-[#ffd60a]">(obrigatória)</span>
             </div>
 
             <input
@@ -333,11 +278,11 @@ export default function AddCountryModal({
             />
 
             {preview && (
-              <div className="mt-2 border-2 border-[#00e5ff] overflow-hidden aspect-[4/3] bg-[#01579b]">
+              <div className="mt-2 border-2 border-[#00e5ff] overflow-hidden p-2 bg-[#01579b] flex items-center justify-center">
                 <img
                   src={preview}
                   alt="Prévia da foto"
-                  className="w-full h-full object-cover"
+                  className="max-h-[200PX] w-full h-full object-contain aspect-square"
                 />
               </div>
             )}
@@ -355,16 +300,7 @@ export default function AddCountryModal({
               disabled={saving}
               className="flex-1 font-['Press_Start_2P'] text-[8px] p-3 border-2 border-[#39ff14] text-[#39ff14] bg-[#39ff1411] disabled:bg-[#39ff1408] cursor-pointer"
             >
-              {saving ? "SALVANDO..." : "✓ SALVAR"}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleClose}
-              disabled={saving}
-              className="px-4 py-3 border-2 border-[#ff4d6d44] text-[#ff4d6d] font-['Press_Start_2P'] text-[8px]"
-            >
-              ✕
+              {saving ? "SALVANDO..." : "SALVAR"}
             </button>
           </div>
         </div>

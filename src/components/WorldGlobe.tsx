@@ -1,17 +1,11 @@
 "use client";
-import type { Country } from "@/lib/types";
 import { ISO_NUMERIC_TO_ALPHA3 } from "@/lib/countries-catalog";
+import type { Country } from "@/lib/types";
 import { PIN_COLORS } from "@/lib/types";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker
-} from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 
-const GEO_URL =
-  "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface Props {
   countries: Country[];
@@ -21,7 +15,13 @@ interface Props {
   homeCode?: string;
 }
 
-export default function WorldGlobe({ countries, onCountryClick, showAllPins = false, initialRotation = [-45, -10, 0], homeCode }: Props) {
+export default function WorldGlobe({
+  countries,
+  onCountryClick,
+  showAllPins = false,
+  initialRotation = [-45, -10, 0],
+  homeCode,
+}: Props) {
   const [rotation, setRotation] = useState<[number, number, number]>(initialRotation);
   const [isDragging, setIsDragging] = useState(false);
   const startPos = useRef({ x: 0, y: 0 });
@@ -38,16 +38,20 @@ export default function WorldGlobe({ countries, onCountryClick, showAllPins = fa
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const visitedCodes = new Set(countries.filter((c) => c.visited).map((c) => c.code));
 
-  const allPins = countries.flatMap((c) => c.pins).filter(
-    (p) => (p.type === "travel" || p.type === "home") && (p.lat !== 0 || p.lng !== 0)
-  );
+  const allPins = countries
+    .flatMap((c) => c.pins)
+    .filter((p) => (p.type === "travel" || p.type === "home") && (p.lat !== 0 || p.lng !== 0));
 
-  const handleMouseEnter = useCallback(() => { isHovering.current = true; }, []);
+  const handleMouseEnter = useCallback(() => {
+    isHovering.current = true;
+  }, []);
   const handleMouseLeave = useCallback(() => {
     isHovering.current = false;
     isDraggingRef.current = false;
@@ -60,16 +64,13 @@ export default function WorldGlobe({ countries, onCountryClick, showAllPins = fa
     startPos.current = { x: e.clientX, y: e.clientY };
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isDraggingRef.current) return;
-      const dx = e.clientX - startPos.current.x;
-      const dy = e.clientY - startPos.current.y;
-      setRotation((r) => [r[0] + dx * 0.4, Math.max(-80, Math.min(80, r[1] - dy * 0.4)), r[2]]);
-      startPos.current = { x: e.clientX, y: e.clientY };
-    },
-    []
-  );
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - startPos.current.x;
+    const dy = e.clientY - startPos.current.y;
+    setRotation((r) => [r[0] + dx * 0.4, Math.max(-80, Math.min(80, r[1] - dy * 0.4)), r[2]]);
+    startPos.current = { x: e.clientX, y: e.clientY };
+  }, []);
 
   const handleMouseUp = useCallback(() => {
     isDraggingRef.current = false;
@@ -85,16 +86,13 @@ export default function WorldGlobe({ countries, onCountryClick, showAllPins = fa
     }
   }, []);
 
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      const dx = e.touches[0].clientX - startPos.current.x;
-      const dy = e.touches[0].clientY - startPos.current.y;
-      setRotation((r) => [r[0] + dx * 0.4, Math.max(-80, Math.min(80, r[1] - dy * 0.4)), r[2]]);
-      startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    },
-    []
-  );
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDraggingRef.current || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - startPos.current.x;
+    const dy = e.touches[0].clientY - startPos.current.y;
+    setRotation((r) => [r[0] + dx * 0.4, Math.max(-80, Math.min(80, r[1] - dy * 0.4)), r[2]]);
+    startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, []);
 
   const handleTouchEnd = useCallback(() => {
     isHovering.current = false;
@@ -197,7 +195,7 @@ export default function WorldGlobe({ countries, onCountryClick, showAllPins = fa
       </div>
 
       <div className="absolute bottom-[-24px] left-1/2 -translate-x-1/2 font-pixel text-[8px] text-white whitespace-nowrap">
-        ↔ arraste para girar
+        arraste para girar
       </div>
     </div>
   );

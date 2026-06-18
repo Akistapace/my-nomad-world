@@ -505,3 +505,20 @@ input:-webkit-autofill:active {
   pointer-events: none;
   border-radius: inherit;
 }
+
+.admin-input {
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  width: 100%;
+  background: #01579b;
+  border: 2px solid #1e6ea8;
+  color: #ffffff;
+  padding: 8px 10px;
+  outline: none;
+}
+.admin-input:focus {
+  border-color: #00e5ff;
+}
+.admin-input option {
+  background: #01579b;
+}

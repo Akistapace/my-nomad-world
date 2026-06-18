@@ -172,6 +172,9 @@ export default function RankingPage() {
   const [loading, setLoading] = useState(true);
   const [loadingFriends, setLoadingFriends] = useState(false);
   const [friendsLoaded, setFriendsLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<RankPlayer[] | null>(null);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     async function loadGlobal() {
@@ -179,6 +182,8 @@ export default function RankingPage() {
       const { data: users } = await supabase
         .from("users")
         .select("id, username, character, level, xp, rank")
+        .eq("is_banned", false)
+        .is("deleted_at", null)
         .order("xp", { ascending: false })
         .limit(50);
 
@@ -290,8 +295,58 @@ export default function RankingPage() {
     setLoadingFriends(false);
   }
 
+  async function handleSearch() {
+    const raw = searchQuery.trim().replace(/^@/, "");
+    if (!raw) { setSearchResults(null); return; }
+    setSearching(true);
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("users")
+      .select("id, username, character, level, xp, rank")
+      .ilike("username", `%${raw}%`)
+      .eq("is_banned", false)
+      .is("deleted_at", null)
+      .order("xp", { ascending: false })
+      .limit(20);
+
+    if (!data || data.length === 0) {
+      setSearchResults([]);
+      setSearching(false);
+      return;
+    }
+
+    const userIds = data.map((u) => u.id);
+    const { data: visitedRows } = await supabase
+      .from("countries")
+      .select("user_id")
+      .in("user_id", userIds)
+      .eq("visited", true);
+    const countByUser: Record<string, number> = {};
+    (visitedRows ?? []).forEach((r) => { countByUser[r.user_id] = (countByUser[r.user_id] ?? 0) + 1; });
+
+    setSearchResults(
+      data.map((u) => ({
+        id: u.id,
+        username: u.username,
+        character: (u.character as unknown as Character) ?? DEFAULT_CHARACTER,
+        level: u.level,
+        xp: u.xp,
+        rank: u.rank,
+        countriesCount: countByUser[u.id] ?? 0,
+        isMe: u.id === user.id,
+      })),
+    );
+    setSearching(false);
+  }
+
+  function clearSearch() {
+    setSearchQuery("");
+    setSearchResults(null);
+  }
+
   function handleTabChange(t: "global" | "friends") {
     setTab(t);
+    clearSearch();
     if (t === "friends") loadFriends();
   }
 
@@ -334,7 +389,53 @@ export default function RankingPage() {
         })}
       </div>
 
-      {tab === "global" && <LeaderboardTable rows={globalPlayers} showPodium />}
+      {tab === "global" && (
+        <>
+          {/* Search */}
+          <div className="pixel-input-wrap" style={{ borderRadius: 0 }}>
+            <input
+              value={searchQuery}
+              onChange={(e) => { setSearchQuery(e.target.value); if (!e.target.value.trim()) setSearchResults(null); }}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              placeholder="BUSCAR JOGADOR..."
+              className="px-4 py-3"
+              style={{ fontFamily: '"Press Start 2P", monospace', fontSize: 7 }}
+            />
+            {searchQuery ? (
+              <button
+                onClick={clearSearch}
+                className="shrink-0 bg-transparent border-l-2 border-l-[#29b6f6] px-4 text-white/50 cursor-pointer text-sm self-stretch flex items-center"
+              >
+                ✕
+              </button>
+            ) : (
+              <button
+                onClick={handleSearch}
+                className="shrink-0 bg-[#00e5ff22] border-l-2 border-l-[#29b6f6] px-5 text-[#00e5ff] cursor-pointer text-lg self-stretch flex items-center"
+              >
+                🔍
+              </button>
+            )}
+          </div>
+
+          {searching && (
+            <div className="text-[8px] text-white/40 text-center py-4 blink">BUSCANDO...</div>
+          )}
+
+          {searchResults !== null && !searching && (
+            searchResults.length === 0 ? (
+              <div className="text-[8px] text-white/40 text-center py-6">Nenhum jogador encontrado.</div>
+            ) : (
+              <>
+                <div className="text-[7px] text-white/40">{searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}</div>
+                <LeaderboardTable rows={searchResults} showPodium={false} />
+              </>
+            )
+          )}
+
+          {searchResults === null && <LeaderboardTable rows={globalPlayers} showPodium />}
+        </>
+      )}
 
       {tab === "friends" &&
         (loadingFriends ? (

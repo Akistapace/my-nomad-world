@@ -109,20 +109,20 @@ export default function FriendsPage() {
       .select("id, username, character, level, xp, rank")
       .ilike("username", `%${raw}%`)
       .neq("id", user.id)
-      .limit(10);
+      .eq("is_banned", false)
+      .is("deleted_at", null)
+      .limit(15);
     setSearchResults(
-      (data ?? [])
-        .filter((u) => !friendIds.has(u.id))
-        .map((u) => ({
-          id: u.id,
-          username: u.username,
-          character: (u.character as unknown as Character) ?? DEFAULT_CHARACTER,
-          level: u.level,
-          xp: ((u as Record<string, unknown>).xp as number) ?? 0,
-          countriesCount: 0,
-          rank: u.rank,
-          isOnline: false,
-        })),
+      (data ?? []).map((u) => ({
+        id: u.id,
+        username: u.username,
+        character: (u.character as unknown as Character) ?? DEFAULT_CHARACTER,
+        level: u.level,
+        xp: ((u as Record<string, unknown>).xp as number) ?? 0,
+        countriesCount: 0,
+        rank: u.rank,
+        isOnline: false,
+      })),
     );
   }
 
@@ -292,13 +292,19 @@ export default function FriendsPage() {
                       LVL {u.level} · RANK #{u.rank}
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleAdd(u.id)}
-                    disabled={addingId === u.id}
-                    className="font-pixel text-[7px] px-[14px] py-2 border-2 border-[#39ff14] bg-[#39ff1411] text-[#39ff14] cursor-pointer shadow-[2px_2px_0_#014080] disabled:opacity-50"
-                  >
-                    {addingId === u.id ? "..." : "+ ADD"}
-                  </button>
+                  {friendIds.has(u.id) ? (
+                    <span className="font-pixel text-[7px] px-3 py-2 border-2 border-[#00e5ff44] text-[#00e5ff] shrink-0">
+                      ✓ AMIGO
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => handleAdd(u.id)}
+                      disabled={addingId === u.id}
+                      className="font-pixel text-[7px] px-[14px] py-2 border-2 border-[#39ff14] bg-[#39ff1411] text-[#39ff14] cursor-pointer shadow-[2px_2px_0_#014080] disabled:opacity-50 shrink-0"
+                    >
+                      {addingId === u.id ? "..." : "+ ADD"}
+                    </button>
+                  )}
                 </div>
               ))}
             </Panel>

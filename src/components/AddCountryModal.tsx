@@ -145,48 +145,39 @@ export default function AddCountryModal({
       .getPublicUrl(path);
 
     const flagEmoji = countryFlagEmoji(selected.alpha2);
+    const formattedDate = day && month && year ? `${year}-${month}-${day}` : null;
+    const center = COUNTRY_CENTERS[selected.code];
 
-    const formattedDate =
-      day && month && year ? `${year}-${month}-${day}` : null;
-
-    const { data, error: insertError } = await supabase
-      .from("countries")
-      .insert({
-        user_id: user.id,
+    const res = await fetch("/api/countries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         code: selected.code,
         name: selected.name,
         flag_emoji: flagEmoji,
         continent: selected.continent,
-        visited: true,
         visited_at: formattedDate,
         photo_url: urlData.publicUrl,
-      })
-      .select()
-      .single();
+        pin: {
+          country_code: selected.code,
+          type: "travel",
+          name: `Visita a ${selected.name}`,
+          lat: center ? center[1] : 0,
+          lng: center ? center[0] : 0,
+          note: formattedDate,
+        },
+      }),
+    });
 
-    if (insertError) {
+    if (!res.ok) {
+      const { code: errCode } = await res.json();
       await supabase.storage.from("country-photos").remove([path]);
-
-      setError(
-        insertError.code === "23505"
-          ? "Você já registrou este país."
-          : "Erro ao salvar país. Tente novamente."
-      );
-
+      setError(errCode === "23505" ? "Você já registrou este país." : "Erro ao salvar país. Tente novamente.");
       setSaving(false);
       return;
     }
 
-    const center = COUNTRY_CENTERS[selected.code];
-    const { data: pinData } = await supabase.from("pins").insert({
-      user_id: user.id,
-      country_code: selected.code,
-      type: "travel",
-      name: `Visita a ${selected.name}`,
-      lat: center ? center[1] : 0,
-      lng: center ? center[0] : 0,
-      note: formattedDate ?? undefined,
-    }).select().single();
+    const { country: data, pin: pinData } = await res.json();
 
     onAdded({
       code: data.code,

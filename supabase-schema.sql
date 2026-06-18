@@ -12,7 +12,9 @@ create table public.users (
   total_pins int not null default 0,
   character jsonb not null default '{"skin":"adventurer","color":"blue","hat":false,"backpack":false}',
   joined_at date not null default now(),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  is_admin boolean not null default false,
+  is_banned boolean not null default false
 );
 
 -- Countries visited by user
@@ -177,3 +179,11 @@ create policy "comments_insert_own" on public.story_comments
   for insert with check (auth.uid() = user_id);
 create policy "comments_delete_own" on public.story_comments
   for delete using (auth.uid() = user_id);
+
+-- ── Etapa 8: Admin panel — run in Supabase SQL Editor ──
+
+alter table public.users add column if not exists is_admin boolean not null default false;
+alter table public.users add column if not exists is_banned boolean not null default false;
+
+-- To make yourself admin (replace with your user UUID from auth.users):
+-- update public.users set is_admin = true where id = 'YOUR-USER-UUID-HERE';

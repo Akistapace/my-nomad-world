@@ -4,7 +4,6 @@ import WorldGlobe from "@/components/WorldGlobe";
 import XPToast from "@/components/XPToast";
 import { useUser } from "@/lib/context/user-context";
 import { rotationForCountry } from "@/lib/country-centers";
-import { createClient } from "@/lib/supabase/client";
 import type { Country, Pin, PinType } from "@/lib/types";
 import type { XPResult } from "@/lib/xp";
 import { useRouter } from "next/navigation";
@@ -27,15 +26,12 @@ export default function HomePage() {
   );
 
   const fetchMap = useCallback(async () => {
-    const supabase = createClient();
-
-    const [{ data: dbCountries }, { data: dbPins }] = await Promise.all([
-      supabase.from("countries").select("*").eq("user_id", user.id).eq("visited", true),
-      supabase.from("pins").select("*").eq("user_id", user.id),
-    ]);
+    const res = await fetch("/api/map");
+    if (!res.ok) return;
+    const { countries: dbCountries, pins: dbPins } = await res.json();
 
     const pinsByCountry: Record<string, Pin[]> = {};
-    (dbPins ?? []).forEach((p) => {
+    (dbPins as { id: string; country_code: string; type: string; name: string; lat: number; lng: number; note: string | null }[]).forEach((p) => {
       if (!pinsByCountry[p.country_code]) pinsByCountry[p.country_code] = [];
       pinsByCountry[p.country_code].push({
         id: p.id,
@@ -49,7 +45,7 @@ export default function HomePage() {
     });
 
     setCountries(
-      (dbCountries ?? []).map((c) => ({
+      (dbCountries as { code: string; name: string; visited: boolean; visited_at: string | null; photo_url: string | null; flag_emoji: string; continent: string }[]).map((c) => ({
         code: c.code,
         name: c.name,
         visited: c.visited,
@@ -60,7 +56,7 @@ export default function HomePage() {
         pins: pinsByCountry[c.code] ?? [],
       })),
     );
-  }, [user.id]);
+  }, []);
 
   useEffect(() => {
     fetchMap();

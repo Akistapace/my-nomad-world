@@ -105,6 +105,19 @@ export default function Sidebar() {
         })}
       </nav>
 
+      {/* Admin link */}
+      {user.isAdmin && (
+        <div className="px-4 pb-2">
+          <Link
+            href="/admin"
+            className="flex items-center gap-2 px-3 py-2 border-2 border-[#ff00ff44] bg-[#ff00ff11] no-underline"
+          >
+            <span className="text-[10px]">🛡</span>
+            <span className="font-pixel text-[7px] text-[#ff00ff]">ADMIN</span>
+          </Link>
+        </div>
+      )}
+
       {/* Footer */}
       <div className="px-4 py-3 border-t-2 border-t-[#29b6f644] flex flex-col gap-2">
         <form action={logout}>

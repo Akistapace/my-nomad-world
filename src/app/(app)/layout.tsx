@@ -6,6 +6,7 @@ import { UserProvider } from "@/lib/context/user-context";
 import { createClient } from "@/lib/supabase/server";
 import type { Character } from "@/lib/types";
 
+
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
 
@@ -37,6 +38,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     );
   }
 
+  if (profile?.is_banned || profile?.deleted_at) redirect("/banned");
+
   // home_code is written to auth metadata at signup — always available, no extra DB query
   const homeCode = (user.user_metadata?.home_code as string | undefined) || undefined;
 
@@ -53,6 +56,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         character: profile.character as unknown as Character,
         joinedAt: profile.joined_at,
         homeCode,
+        isAdmin: profile.is_admin || user.email === "fernando.akistapace@gmail.com",
       }
     : {
         id: user.id,
@@ -66,6 +70,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         character: { skin: "adventurer", color: "blue", hat: false, backpack: false },
         joinedAt: new Date().toISOString().slice(0, 10),
         homeCode,
+        isAdmin: user.email === "fernando.akistapace@gmail.com",
       };
 
   return (

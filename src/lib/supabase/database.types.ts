@@ -15,6 +15,9 @@ export interface Database {
           character: Json;
           joined_at: string;
           created_at: string;
+          is_admin: boolean;
+          is_banned: boolean;
+          deleted_at: string | null;
         };
         Insert: {
           id: string;
@@ -27,6 +30,9 @@ export interface Database {
           character?: Json;
           joined_at?: string;
           created_at?: string;
+          is_admin?: boolean;
+          is_banned?: boolean;
+          deleted_at?: string | null;
         };
         Update: {
           username?: string;
@@ -36,6 +42,9 @@ export interface Database {
           rank?: number;
           total_pins?: number;
           character?: Json;
+          is_admin?: boolean;
+          is_banned?: boolean;
+          deleted_at?: string | null;
         };
         Relationships: [];
       };
@@ -135,7 +144,7 @@ export interface Database {
           user_id: string;
           country_code: string;
           country_name: string;
-          caption: string;
+          caption?: string;
           likes?: number;
           photo_url?: string | null;
           created_at?: string;
@@ -189,23 +198,31 @@ export interface Database {
           title: string;
           description: string;
           type: string;
-          difficulty: string;
-          icon: string;
+          difficulty?: string;
+          icon?: string;
           progress?: number;
-          total: number;
-          xp_reward: number;
-          coin_reward: number;
+          total?: number;
+          xp_reward?: number;
+          coin_reward?: number;
           completed?: boolean;
           created_at?: string;
         };
         Update: {
           progress?: number;
           completed?: boolean;
+          xp_reward?: number;
+          coin_reward?: number;
         };
         Relationships: [];
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      recalculate_ranks: {
+        Args: Record<string, never>;
+        Returns: void;
+      };
+    };
+    Enums: Record<string, never>;
   };
 }

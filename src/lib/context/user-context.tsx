@@ -14,6 +14,7 @@ export interface UserProfile {
   character: Character;
   joinedAt: string;
   homeCode?: string;
+  isAdmin?: boolean;
 }
 
 const UserContext = createContext<UserProfile | null>(null);

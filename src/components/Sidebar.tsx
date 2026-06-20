@@ -74,6 +74,36 @@ export default function Sidebar() {
             </div>
           ))}
         </div>
+
+        {/* Globe completion */}
+        {(() => {
+          const TOTAL_COUNTRIES = 195;
+          const globePct = Math.min((user.countriesCount / TOTAL_COUNTRIES) * 100, 100);
+          const globePctDisplay = globePct < 1 ? globePct.toFixed(1) : Math.floor(globePct);
+          return (
+            <div className="bg-[#01579b] border border-[#29b6f6] px-2 py-2">
+              <div className="flex justify-between items-center mb-1">
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px]">🌐</span>
+                  <span className="text-[6px] text-[#00e5ff] tracking-[0.5px]">CONQUISTADOR DO GLOBO</span>
+                </div>
+                <span className="text-[7px] text-[#ffd60a] font-bold">{globePctDisplay}%</span>
+              </div>
+              <div className="h-1.5 bg-[#003c6b] border border-[#29b6f644] overflow-hidden rounded-full">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    width: `${globePct}%`,
+                    background: "linear-gradient(90deg, #00e5ff, #ffd60a)",
+                  }}
+                />
+              </div>
+              <div className="text-[5px] text-white/40 mt-1 text-right">
+                {user.countriesCount}/{TOTAL_COUNTRIES} PAÍSES
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Nav items */}

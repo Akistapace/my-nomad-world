@@ -258,6 +258,19 @@ export const MOCK_CHALLENGES: Challenge[] = [
     icon: "🗺",
     difficulty: "legendary",
   },
+  {
+    id: "c7",
+    title: "Conquistador do Globo",
+    description: "Visite todos os 195 países do mundo",
+    type: "explore",
+    progress: 3,
+    total: 195,
+    xpReward: 100000,
+    coinReward: 0,
+    completed: false,
+    icon: "🌐",
+    difficulty: "legendary",
+  },
 ];
 
 export const MOCK_SUGGESTIONS: ActivitySuggestion[] = [
